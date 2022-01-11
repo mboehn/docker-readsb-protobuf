@@ -153,4 +153,13 @@ for service in "${services[@]}"; do
     fi
 done
 
+##### Check for dropped samples #####
+if protoc --proto_path="$READSB_PROTO_PATH" --decode Statistics readsb.proto < "$READSB_STATS_PB_FILE" | grep 'local_samples_dropped' > /dev/null 2>&1; then
+    echo "readsb local_samples_dropped > 0: UNHEALTHY"
+    exit 1
+else
+    echo "readsb local_samples_dropped = 0: HEALTHY"
+fi
+
+
 exit 0
